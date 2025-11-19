@@ -19,38 +19,38 @@ let searchDebounceTimer = null;
 document.addEventListener('DOMContentLoaded', function() {
     _updateFavoritesCount();
     _setupSearchBar();
-    _loadMALUsername();
+    _loadAniListUsername();
 });
 
 //=============================================================================
-// MYANIMELIST INTEGRATION
+// ANILIST INTEGRATION
 //=============================================================================
 
-function _loadMALUsername() {
-    const username = localStorage.getItem('mal_username');
+function _loadAniListUsername() {
+    const username = localStorage.getItem('anilist_username');
     if (username) {
-        document.getElementById('malUsername').value = username;
-        _updateMALLink(username);
+        document.getElementById('anilistUsername').value = username;
+        _updateAniListLink(username);
     }
 }
 
-function _saveMALUsername() {
-    const username = document.getElementById('malUsername').value.trim();
+function _saveAniListUsername() {
+    const username = document.getElementById('anilistUsername').value.trim();
     if (username) {
-        localStorage.setItem('mal_username', username);
-        _updateMALLink(username);
-        _showToast('Username MyAniList salvato!', 'success');
+        localStorage.setItem('anilist_username', username);
+        _updateAniListLink(username);
+        _showToast('Username AniList salvato!', 'success');
     } else {
-        localStorage.removeItem('mal_username');
-        document.getElementById('malProfileLink').style.display = 'none';
+        localStorage.removeItem('anilist_username');
+        document.getElementById('anilistProfileLink').style.display = 'none';
         _showToast('Username rimosso', 'info');
     }
 }
 
-function _updateMALLink(username) {
-    const link = document.getElementById('malProfileLink');
+function _updateAniListLink(username) {
+    const link = document.getElementById('anilistProfileLink');
     if (username) {
-        link.href = `https://myanimelist.net/profile/${username}`;
+        link.href = `https://anilist.co/user/${username}`;
         link.style.display = 'flex';
     } else {
         link.style.display = 'none';
@@ -250,64 +250,69 @@ function _createCard(anime) {
                 </span>
             </div>
             <div class="card_streamings">
-                <p class="streamings-title">Guarda su:</p>
-                <div class="streaming-list">
-                    <button class="streaming-icon" 
-                            onclick="_animeSaturn('${encodeURIComponent(title)}')" 
-                            title="AnimeSaturn">
-                        <i class="fas fa-globe-europe"></i>
-                    </button>
-                    <button class="streaming-icon" 
-                            onclick="_animeUnity('${encodeURIComponent(title)}')" 
-                            title="AnimeUnity">
-                        <i class="fas fa-infinity"></i>
-                    </button>
-                    <button class="streaming-icon" 
-                            onclick="_socialAnime('${encodeURIComponent(title)}')" 
-                            title="SocialAnime">
-                        <i class="fab fa-stripe-s"></i>
-                    </button>
-                    <button class="streaming-icon" 
-                            onclick="_animeHDITA('${encodeURIComponent(title)}')" 
-                            title="AnimeHD ITA">
-                        <i class="fas fa-tv"></i>
-                    </button>
-                    <button class="streaming-icon" 
-                            onclick="_yamatoVideo('${encodeURIComponent(title)}')" 
-                            title="Yamato Video">
-                        <i class="fab fa-youtube"></i>
-                    </button>
+                <p class="streamings-title">Streaming ufficiali:</p>
+                <div class="streaming-list" id="streaming-${id}">
+                    <span class="streaming-loading">Caricamento...</span>
                 </div>
             </div>
         </div>
     `;
     
     document.getElementById("cardList").appendChild(card);
+    
+    // Fetch streaming info
+    _loadStreamingProviders(id, title);
 }
 
 //=============================================================================
-// STREAMING LINKS
+// STREAMING PROVIDERS
 //=============================================================================
 
-function _animeSaturn(title) {
-    window.open("https://www.animesaturn.it/animelist?search=" + title, "_blank");
-}
-
-function _socialAnime(title) {
-    window.open("https://socialanime.it/search?q=" + title, "_blank");
-}
-
-function _animeHDITA(title) {
-    window.open("https://www.animehdita.org/?s=" + title, "_blank");
-}
-
-function _yamatoVideo(title) {
-    const decodedTitle = decodeURIComponent(title);
-    window.open("https://www.youtube.com/results?search_query=yamato+" + decodedTitle.replace(/\s/g, "+"), "_blank");
-}
-
-function _animeUnity(title) {
-    window.open("https://www.animeunity.it/archivio?title=" + title, "_blank");
+function _loadStreamingProviders(animeId, title) {
+    const container = document.getElementById(`streaming-${animeId}`);
+    
+    fetch(`https://api.jikan.moe/v4/anime/${animeId}/streaming`)
+        .then(response => response.json())
+        .then(result => {
+            const providers = result.data || [];
+            
+            if (providers.length === 0) {
+                container.innerHTML = `
+                    <a href="https://www.crunchyroll.com/search?q=${encodeURIComponent(title)}" 
+                       target="_blank" class="streaming-icon" title="Cerca su Crunchyroll">
+                        <i class="fas fa-search"></i> CR
+                    </a>
+                    <a href="https://www.netflix.com/search?q=${encodeURIComponent(title)}" 
+                       target="_blank" class="streaming-icon" title="Cerca su Netflix">
+                        <i class="fas fa-search"></i> NF
+                    </a>
+                `;
+                return;
+            }
+            
+            const icons = {
+                'crunchyroll': '<i class="fas fa-play-circle"></i>',
+                'netflix': '<i class="fab fa-youtube"></i>',
+                'hulu': '<i class="fas fa-tv"></i>',
+                'amazon': '<i class="fab fa-amazon"></i>',
+                'funimation': '<i class="fas fa-film"></i>',
+                'hidive': '<i class="fas fa-video"></i>'
+            };
+            
+            container.innerHTML = providers.slice(0, 5).map(provider => {
+                const name = provider.name.toLowerCase();
+                const icon = icons[name] || '<i class="fas fa-external-link-alt"></i>';
+                return `<a href="${provider.url}" target="_blank" class="streaming-icon" title="${provider.name}">${icon}</a>`;
+            }).join('');
+        })
+        .catch(() => {
+            container.innerHTML = `
+                <a href="https://www.crunchyroll.com/search?q=${encodeURIComponent(title)}" 
+                   target="_blank" class="streaming-icon" title="Cerca su Crunchyroll">
+                    <i class="fas fa-search"></i>
+                </a>
+            `;
+        });
 }
 
 //=============================================================================
