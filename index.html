@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-C4GK05YM1H"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-C4GK05YM1H');
+	</script>
+	
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="AnimeSearch è un motore che facilita la ricerca di ANIME sub ita/eng in riferimento ai più popolari siti di streaming."/>
+	<meta name="keywords" content="anime, search, engine, ricerca, animazione giapponese, manga"/>
+	<meta name="author" content="Luca Mastroianni | BlueMoon" />
+	<meta name="robots" content="follow"/>
+	<meta http-equiv="cache-control" content="no-cache"/>
+	
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+	
+	<!-- Icons -->
+	<link rel="icon" href="./src/taiga.png">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+	
+	<!-- Styles -->
+	<link rel="stylesheet" href="./css/main.css">
+	
+	<title>AnimeSearch - Motore di Ricerca Anime</title>
+</head>
+<body>
+	<!-- Header -->
+	<header class="main-header">
+		<div class="header-content">
+			<h1 class="logo">
+				<i class="fas fa-play-circle"></i>
+				ANIMESEARCH
+			</h1>
+			<p class="subtitle">Motore di Ricerca per Streaming Anime SUB ITA/ITA</p>
+			<div class="mal-profile">
+				<input type="text" id="malUsername" placeholder="Username MyAnimeList" class="mal-input">
+				<button onclick="_saveMALUsername()" class="mal-save-btn" title="Salva username">
+					<i class="fas fa-save"></i>
+				</button>
+				<a id="malProfileLink" href="#" target="_blank" class="mal-link" style="display: none;">
+					<i class="fas fa-user-circle"></i> Profilo MAL
+				</a>
+			</div>
+		</div>
+		
+		<!-- Search Section -->
+		<div class="search-section">
+			<form id="searchForm" class="search-form" onsubmit="event.preventDefault(); _startSearch();">
+				<div class="search-input-wrapper">
+					<i class="fas fa-search search-icon"></i>
+					<input 
+						id="searchBarInput" 
+						class="search-bar" 
+						type="text" 
+						placeholder="Cerca il tuo anime preferito..." 
+						name="search"
+						autocomplete="off"
+					>
+					<button type="button" id="clearBtn" class="clear-btn" onclick="_clearSearch()">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+				<button type="submit" class="search-button">
+					<span>Cerca</span>
+					<i class="fas fa-arrow-right"></i>
+				</button>
+			</form>
+			
+			<!-- Filters -->
+			<div class="filters-container">
+				<div class="filter-group">
+					<label for="sortBy">
+						<i class="fas fa-sort"></i> Ordina per:
+					</label>
+					<select id="sortBy" class="filter-select" onchange="_applyFilters()">
+						<option value="relevance">Rilevanza</option>
+						<option value="score-desc">Score (Alto → Basso)</option>
+						<option value="score-asc">Score (Basso → Alto)</option>
+						<option value="title-asc">Titolo (A → Z)</option>
+					</select>
+				</div>
+				
+				<div class="filter-group">
+					<label for="statusFilter">
+						<i class="fas fa-filter"></i> Status:
+					</label>
+					<select id="statusFilter" class="filter-select" onchange="_applyFilters()">
+						<option value="all">Tutti</option>
+						<option value="airing">In Onda</option>
+						<option value="completed">Conclusi</option>
+					</select>
+				</div>
+				
+				<div class="filter-group">
+					<label for="minScore">
+						<i class="fas fa-star"></i> Score minimo:
+					</label>
+					<select id="minScore" class="filter-select" onchange="_applyFilters()">
+						<option value="0">Tutti</option>
+						<option value="6">6.0+</option>
+						<option value="7">7.0+</option>
+						<option value="8">8.0+</option>
+						<option value="9">9.0+</option>
+					</select>
+				</div>
+				
+				<button class="favorites-btn" onclick="_toggleFavoritesView()">
+					<i class="fas fa-heart"></i>
+					<span>Preferiti</span>
+					<span id="favCount" class="fav-count">0</span>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<!-- Loading Spinner -->
+	<div id="loadingSpinner" class="loading-container" style="display: none;">
+		<div class="spinner"></div>
+		<p>Caricamento anime in corso...</p>
+	</div>
+
+	<!-- Results Info -->
+	<div id="resultsInfo" class="results-info" style="display: none;">
+		<span id="resultsCount"></span>
+	</div>
+
+	<!-- Cards Container -->
+	<div id="cardList" class="cards-list"></div>
+
+	<!-- Toast Notification -->
+	<div id="toast" class="toast"></div>
+
+	<!-- Modal for Anime Details -->
+	<div id="animeModal" class="modal">
+		<div class="modal-content">
+			<button class="modal-close" onclick="_closeModal()">
+				<i class="fas fa-times"></i>
+			</button>
+			<div id="modalBody" class="modal-body"></div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer id="footer">
+		<div class="footer-content">
+			<div class="footer-section">
+				<h2 class="footer-logo">
+					<i class="fas fa-play-circle"></i>
+					ANIMESEARCH
+				</h2>
+				<div class="social-links">
+					<a href="https://twitter.com/BlueMoon_Coder" target="_blank" aria-label="Twitter">
+						<i class="fab fa-twitter"></i>
+					</a>
+				</div>
+				<p class="copyright">COPYRIGHT © 2025 BlueMoon, All Rights Reserved.</p>
+			</div>
+			
+			<div class="footer-section">
+				<p class="disclaimer">
+					<strong>Disclaimer:</strong> All the websites and shows displayed in this portal are the property of their respective and rightful owners.
+				</p>
+				<p class="disclaimer-sub">
+					This site does not store any files on its server. All contents are provided by non-affiliated third parties.
+				</p>
+				<a class="privacy-policy" href="https://www.privacypolicies.com/live/7db480d4-e153-4a6d-a762-d682091f0152" target="_blank">
+					Privacy Policy
+				</a>
+			</div>
+			
+			<div class="footer-section footer-mascot">
+				<img src="./src/taiga-footer.png" alt="Taiga" class="mascot-img"/>
+			</div>
+		</div>
+	</footer>
+
+	<!-- JavaScript -->
+	<script src="./js/main.js"></script>
+</body>
+</html>
