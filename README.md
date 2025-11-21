@@ -1,166 +1,231 @@
 # 🎌 AnimeSearch 2025 - Modern Redesign
 
-Un motore di ricerca moderno e potente per anime con supporto per streaming SUB ITA/ITA.
+Un motore di ricerca moderno e potente per anime con integrazione completa **AniList** e streaming ufficiali.
 
-## ✨ Novità nella versione 2025
+## ✨ Caratteristiche Principali
 
-### 🎨 Design
-- **Interfaccia moderna** con glassmorphism e gradienti
-- **Animazioni fluide** e micro-interazioni per una UX superiore
-- **Tema dark elegante** ottimizzato per la visualizzazione
-- **Design completamente responsive** per tutti i dispositivi
-- **Loading states** e skeleton screens
-- **Toast notifications** per feedback immediato
+### 🎮 Integrazione AniList
+- **Liste Personali**: Watching, Completati, Da Vedere, In Pausa
+- **Badge Utente**: Voto personale e progresso episodi
+- **Statistiche**: Conteggio anime e score medio
+- **API GraphQL**: Connessione diretta ufficiale (90 req/min)
 
-### ⚡ Funzionalità Nuove
+### 🎬 Streaming Ufficiali
+- Link diretti a **Crunchyroll**, **Netflix**, **Amazon Prime**, **Hulu**
+- Caricamento automatico via API Jikan
+- Fallback ricerca se non disponibili
+- Solo provider legali
 
-#### Sistema di Ricerca Avanzato
-- ✅ Ricerca migliorata con gestione errori
-- ✅ Bottone per pulire la ricerca rapidamente
-- ✅ Feedback visivo durante il caricamento
+### 🔍 Ricerca Avanzata
+- API **Jikan v4** gratuita (60 req/min)
+- Filtri per status e score
+- Ordinamento multiplo
+- Nessuna API key richiesta
 
-#### Filtri e Ordinamento
-- 🔍 **Filtra per status**: In Onda, Conclusi, Tutti
-- ⭐ **Filtra per score**: Seleziona il punteggio minimo
-- 📊 **Ordina risultati**: Per rilevanza, score o titolo
-- 🔄 Applicazione filtri in tempo reale
+### ⚡ Funzionalità Moderne
+- **Sistema Preferiti** con localStorage
+- **Modal Dettagli** con sinossi completa
+- **Toast Notifications** per feedback
+- **Keyboard Shortcuts** (ESC, Ctrl+K)
+- **Design Responsive** mobile-first
 
-#### Sistema Preferiti
-- ❤️ Aggiungi/rimuovi anime dai preferiti
-- 💾 Salvataggio locale (localStorage)
-- 📱 Visualizzazione rapida di tutti i preferiti
-- 🔔 Contatore preferiti sempre visibile
+---
 
-#### Modal Dettagli
-- ℹ️ Visualizzazione dettagli completi
-- 📝 Sinossi, generi, studio, episodi
-- 🖼️ Immagini ad alta qualità
-- ✨ Animazioni eleganti
+## 🚀 Quick Start
 
-#### Esperienza Utente
-- ⌨️ **Scorciatoie tastiera**: 
-  - `ESC` per chiudere modal
-  - `Ctrl/Cmd + K` per focus ricerca
-- 📱 Design ottimizzato per mobile
-- 🚀 Performance migliorate
-- 🎯 Accessibilità migliorata
+1. Apri `index.html` nel browser
+2. **(Opzionale)** Inserisci username **AniList** nell'header
+3. Clicca **Salva** per connettere il profilo
+4. Usa i pulsanti per caricare le tue liste
+5. Oppure cerca anime normalmente
 
-## 🎯 Siti di Streaming Supportati
+---
 
-1. **AnimeSaturn** - Ampia collezione di anime sub ITA
-2. **AnimeUnity** - Streaming anime di qualità
-3. **SocialAnime** - Community e streaming
-4. **AnimeHD ITA** - Alta definizione
-5. **Yamato Video** - Canale YouTube ufficiale
+## 📋 Come Usare AniList
 
-## 📁 Struttura del Progetto
+### Setup Iniziale
+1. Inserisci il tuo **username pubblico** AniList
+2. Clicca il bottone **Salva**
+3. Toast conferma: "Connesso: X anime"
+4. Compaiono 4 pulsanti liste
 
-```
-animesearch-updated/
-├── index.html          # Pagina principale
-├── css/
-│   └── main.css       # Stili moderni
-├── js/
-│   └── main.js        # Logica applicazione
-└── src/
-    ├── taiga.png      # Logo/mascotte
-    └── taiga-footer.png
-```
+### Caricare Liste
+- **🎬 Watching** - Anime in corso con progresso
+- **✅ Completati** - Anime finiti con voto
+- **⏰ Da Vedere** - Plan to Watch
+- **⏸️ In Pausa** - On Hold con progresso
 
-## 🚀 Come Usare
+### Badge sulle Card
+Le card mostrano:
+- ⭐ **Score Globale** (MyAnimeList/AniList)
+- ❤️ **Tuo Voto** (1-10, se disponibile)
+- 📺 **Progresso** (episodi visti, se disponibile)
 
-1. **Apri** `index.html` nel browser
-2. **Cerca** un anime nel campo di ricerca
-3. **Applica filtri** per raffinare i risultati
-4. **Clicca** sulle icone streaming per guardare
-5. **Aggiungi** ai preferiti cliccando il cuore
-6. **Visualizza dettagli** cliccando l'icona info
+---
+
+## 🎨 Features Design
+
+- **Dark Theme** con gradienti moderni
+- **Glassmorphism** effects
+- **Animazioni fluide** su hover e transizioni
+- **Footer fisso** sempre visibile
+- **Grid Layout** responsive automatico
+
+---
 
 ## 🔧 Requisiti
 
 - Browser moderno (Chrome, Firefox, Safari, Edge)
-- Connessione internet per API MyAnimeList (Jikan)
+- Connessione internet
 - JavaScript abilitato
+- **(Opzionale)** Account AniList pubblico
 
-## 🎨 Personalizzazione
+---
 
-### Colori (CSS Variables)
-```css
---primary-color: #6366f1;
---secondary-color: #8b5cf6;
---accent-color: #ec4899;
+## 🎯 Filtri Disponibili
+
+- **Status**: Tutti / In Onda / Conclusi
+- **Score Minimo**: 0+ / 6+ / 7+ / 8+ / 9+
+- **Ordina**: Rilevanza / Score ↓ / Score ↑ / A-Z
+
+---
+
+## 📱 Responsive Design
+
+- **Desktop**: Grid 4-5 colonne
+- **Tablet**: Grid 2-3 colonne
+- **Mobile**: Grid 1-2 colonne
+- Footer ottimizzato per tutti i dispositivi
+
+---
+
+## 🔒 Privacy
+
+- **Nessun tracking**: Zero cookie di terze parti
+- **LocalStorage**: Solo preferiti e username (locale)
+- **AniList**: Solo lettura dati pubblici
+- **No Auth**: Nessuna password richiesta
+
+---
+
+## 🌐 API Utilizzate
+
+### Jikan v4 (MyAnimeList)
+- **URL**: `https://api.jikan.moe/v4`
+- **Limite**: 60 richieste/minuto
+- **Costo**: Gratuita
+- **Auth**: Non richiesta
+
+### AniList GraphQL
+- **URL**: `https://graphql.anilist.co`
+- **Limite**: 90 richieste/minuto
+- **Costo**: Gratuita
+- **Auth**: Non richiesta (solo dati pubblici)
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Tasto | Azione |
+|-------|--------|
+| `ESC` | Chiudi modal dettagli |
+| `Ctrl + K` | Focus ricerca |
+| `Cmd + K` | Focus ricerca (Mac) |
+
+---
+
+## 📂 Struttura Progetto
+
+```
+animesearch-updated/
+├── index.html              # Pagina principale
+├── css/
+│   └── main.css           # Stili moderni (~1000 righe)
+├── js/
+│   └── main.js            # Logica applicazione (~600 righe)
+├── src/
+│   ├── taiga.png          # Logo
+│   └── taiga-footer.png   # Mascotte footer
+├── README.md              # Questo file
+├── CHANGELOG.md           # Storia versioni
+├── ANILIST-GUIDE.md       # Guida AniList dettagliata
+└── GUIDA-RAPIDA.md        # Quick start
 ```
 
-### Modificare l'API Key
-Nel file `js/main.js`, cerca e sostituisci:
-```javascript
-"x-rapidapi-key": "TUA_API_KEY"
-```
+---
 
-## 📱 Responsive Breakpoints
+## 🐛 Troubleshooting
 
-- Desktop: > 768px
-- Tablet: 481px - 768px
-- Mobile: < 480px
+### AniList non carica
+- Verifica username corretto (case-sensitive)
+- Profilo deve essere pubblico
+- Controlla console browser (F12)
 
-## 🔒 Privacy & Sicurezza
+### Streaming non appaiono
+- Alcuni anime non hanno provider
+- Appare fallback ricerca Crunchyroll/Netflix
+- Attendi caricamento (può richiedere 2-3 sec)
 
-- Non raccoglie dati personali
-- Preferiti salvati solo localmente (localStorage)
-- Link esterni aperti in nuove tab
-- Nessun cookie di tracciamento
+### Preferiti non salvati
+- Browser in modalità normale (no incognito)
+- LocalStorage abilitato
+- Spazio storage disponibile
 
-## 🐛 Risoluzione Problemi
+---
 
-### La ricerca non funziona
-- Verifica la connessione internet
-- Controlla la validità dell'API key
-- Verifica la console del browser per errori
+## 📊 Statistiche Progetto
 
-### I preferiti non vengono salvati
-- Assicurati che JavaScript sia abilitato
-- Verifica che il browser supporti localStorage
-- Controlla le impostazioni privacy del browser
+- **Linee CSS**: ~1000
+- **Linee JavaScript**: ~600
+- **API Integrate**: 2 (Jikan v4 + AniList)
+- **Features**: 20+
+- **Responsive Breakpoints**: 3
 
-## 📝 Changelog
+---
 
-### v2.0 (2025)
-- ✨ Redesign completo dell'interfaccia
-- 🎯 Sistema filtri avanzato
-- ❤️ Sistema preferiti con localStorage
-- 📱 Modal dettagli anime
-- 🎨 Animazioni e transizioni fluide
-- 🔔 Toast notifications
-- ⌨️ Keyboard shortcuts
-- 📱 Responsive design migliorato
+## 🔮 Roadmap Futura
 
-### v1.0 (2021)
-- 🎬 Ricerca anime di base
-- 🔗 Link ai siti di streaming
-- 📊 Visualizzazione card
+- [ ] PWA Support (installabile)
+- [ ] Dark/Light mode toggle
+- [ ] Export/Import liste
+- [ ] Notifiche nuovi episodi
+- [ ] Watchlist avanzata
+- [ ] Sincronizzazione AniList bidirezionale
+
+---
 
 ## 👨‍💻 Autore
 
 **Luca Mastroianni | BlueMoon**
 - Twitter: [@BlueMoon_Coder](https://twitter.com/BlueMoon_Coder)
 
+---
+
 ## 📄 Licenza
 
 Copyright © 2025 BlueMoon. All Rights Reserved.
 
-## 🙏 Riconoscimenti
+---
+
+## 🙏 Credits
 
 - **Jikan API** - MyAnimeList API non ufficiale
+- **AniList** - Piattaforma anime e API GraphQL
 - **Font Awesome** - Icone
 - **Google Fonts** - Typography (Poppins)
-- **Taiga Aisaka** - Mascotte del progetto
-
-## 🔗 Link Utili
-
-- [Jikan API Documentation](https://jikan.moe/)
-- [MyAnimeList](https://myanimelist.net/)
-- [Privacy Policy](https://www.privacypolicies.com/live/7db480d4-e153-4a6d-a762-d682091f0152)
+- **Taiga Aisaka** - Mascotte progetto
 
 ---
+
+## 📚 Documentazione Aggiuntiva
+
+- [CHANGELOG.md](./CHANGELOG.md) - Storia completa versioni
+- [ANILIST-GUIDE.md](./ANILIST-GUIDE.md) - Guida dettagliata AniList
+- [GUIDA-RAPIDA.md](./GUIDA-RAPIDA.md) - Quick start italiano
+
+---
+
+**Versione Attuale:** 2.3.0  
+**Ultimo Aggiornamento:** Novembre 2025
 
 Made with ❤️ and ☕ by BlueMoon
