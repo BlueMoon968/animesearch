@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     _loadAniListUsername();
 });
 
+// Global AniList data
+let anilistUserData = null;
+
 //=============================================================================
 // ANILIST INTEGRATION
 //=============================================================================
@@ -31,6 +34,7 @@ function _loadAniListUsername() {
     if (username) {
         document.getElementById('anilistUsername').value = username;
         _updateAniListLink(username);
+        document.getElementById('anilistLists').style.display = 'flex';
     }
 }
 
@@ -39,10 +43,14 @@ function _saveAniListUsername() {
     if (username) {
         localStorage.setItem('anilist_username', username);
         _updateAniListLink(username);
+        document.getElementById('anilistLists').style.display = 'flex';
         _showToast('Username AniList salvato!', 'success');
+        _fetchAniListUserData(username);
     } else {
         localStorage.removeItem('anilist_username');
         document.getElementById('anilistProfileLink').style.display = 'none';
+        document.getElementById('anilistLists').style.display = 'none';
+        anilistUserData = null;
         _showToast('Username rimosso', 'info');
     }
 }
@@ -55,6 +63,127 @@ function _updateAniListLink(username) {
     } else {
         link.style.display = 'none';
     }
+}
+
+function _fetchAniListUserData(username) {
+    // Fetch user ID
+    const query = `
+    query ($username: String) {
+        User(name: $username) {
+            id
+            name
+            statistics {
+                anime {
+                    count
+                    meanScore
+                }
+            }
+        }
+    }`;
+    
+    fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { username } })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.data && data.data.User) {
+            anilistUserData = data.data.User;
+            _showToast(`Connesso: ${data.data.User.statistics.anime.count} anime`, 'success');
+        }
+    })
+    .catch(() => _showToast('Errore connessione AniList', 'error'));
+}
+
+function _loadAniListList(status) {
+    const username = localStorage.getItem('anilist_username');
+    if (!username) {
+        _showToast('Inserisci username AniList', 'error');
+        return;
+    }
+    
+    _showLoading(true);
+    _clearResults();
+    
+    const query = `
+    query ($username: String, $status: MediaListStatus) {
+        MediaListCollection(userName: $username, type: ANIME, status: $status) {
+            lists {
+                entries {
+                    media {
+                        id
+                        idMal
+                        title {
+                            romaji
+                            english
+                        }
+                        coverImage {
+                            large
+                        }
+                        averageScore
+                        status
+                    }
+                    score
+                    progress
+                }
+            }
+        }
+    }`;
+    
+    fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { username, status } })
+    })
+    .then(r => r.json())
+    .then(data => {
+        _showLoading(false);
+        
+        if (!data.data || !data.data.MediaListCollection) {
+            _createNullifyHeader();
+            return;
+        }
+        
+        const entries = data.data.MediaListCollection.lists[0]?.entries || [];
+        
+        if (entries.length === 0) {
+            _createNullifyHeader();
+            return;
+        }
+        
+        // Convert to our format
+        allAnimeResults = entries.map(entry => ({
+            mal_id: entry.media.idMal || entry.media.id,
+            url: `https://anilist.co/anime/${entry.media.id}`,
+            image_url: entry.media.coverImage.large,
+            title: entry.media.title.english || entry.media.title.romaji,
+            airing: entry.media.status === 'RELEASING',
+            score: entry.media.averageScore ? entry.media.averageScore / 10 : null,
+            userScore: entry.score,
+            progress: entry.progress
+        }));
+        
+        _displayResults(allAnimeResults);
+        
+        const statusLabels = {
+            'CURRENT': 'Watching',
+            'COMPLETED': 'Completati',
+            'PLANNING': 'Da Vedere',
+            'PAUSED': 'In Pausa'
+        };
+        
+        const resultsInfo = document.getElementById('resultsInfo');
+        const resultsCount = document.getElementById('resultsCount');
+        resultsInfo.style.display = 'block';
+        resultsCount.textContent = `${entries.length} anime - ${statusLabels[status]}`;
+    })
+    .catch(error => {
+        _showLoading(false);
+        console.error('AniList error:', error);
+        _showToast('Errore caricamento lista AniList', 'error');
+        _createErrorMessage();
+    });
 }
 
 //=============================================================================
@@ -220,6 +349,10 @@ function _createCard(anime) {
     const infoUrl = anime.url;
     const isFavorite = favorites.includes(id);
     
+    // AniList user data
+    const userScore = anime.userScore ? `<span class="user-score"><i class="fas fa-heart"></i> ${anime.userScore}/10</span>` : '';
+    const progress = anime.progress ? `<span class="user-progress"><i class="fas fa-tv"></i> ${anime.progress} ep</span>` : '';
+    
     const card = document.createElement("div");
     card.className = "card";
     card.id = id;
@@ -248,6 +381,8 @@ function _createCard(anime) {
                     <i class="fas fa-star"></i>
                     ${score}
                 </span>
+                ${userScore}
+                ${progress}
             </div>
             <div class="card_streamings">
                 <p class="streamings-title">Streaming ufficiali:</p>

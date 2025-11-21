@@ -147,6 +147,34 @@ body {
     color: white;
 }
 
+.anilist-lists {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.anilist-list-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid var(--secondary-color);
+    border-radius: 25px;
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.anilist-list-btn:hover {
+    background: var(--secondary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
 /* ==================
    SEARCH SECTION
    ================== */
@@ -578,6 +606,30 @@ body {
     font-weight: 600;
 }
 
+.user-score {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(236, 72, 153, 0.1);
+    border-radius: 50px;
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.user-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 50px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
 .card_streamings {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -938,6 +990,17 @@ footer {
     .mal-input {
         width: 100%;
         max-width: 100%;
+    }
+    
+    .anilist-lists {
+        width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .anilist-list-btn {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
     }
     
     .search-form {

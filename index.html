@@ -46,8 +46,24 @@
 					<i class="fas fa-save"></i>
 				</button>
 				<a id="anilistProfileLink" href="#" target="_blank" class="mal-link" style="display: none;">
-					<i class="fas fa-user-circle"></i> Profilo AniList
+					<i class="fas fa-user-circle"></i> Profilo
 				</a>
+			</div>
+			
+			<!-- AniList Lists -->
+			<div id="anilistLists" class="anilist-lists" style="display: none;">
+				<button onclick="_loadAniListList('CURRENT')" class="anilist-list-btn">
+					<i class="fas fa-play"></i> Watching
+				</button>
+				<button onclick="_loadAniListList('COMPLETED')" class="anilist-list-btn">
+					<i class="fas fa-check"></i> Completati
+				</button>
+				<button onclick="_loadAniListList('PLANNING')" class="anilist-list-btn">
+					<i class="fas fa-clock"></i> Da Vedere
+				</button>
+				<button onclick="_loadAniListList('PAUSED')" class="anilist-list-btn">
+					<i class="fas fa-pause"></i> In Pausa
+				</button>
 			</div>
 		</div>
 		
