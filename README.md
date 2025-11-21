@@ -217,14 +217,6 @@ Copyright © 2025 BlueMoon. All Rights Reserved.
 
 ---
 
-## 📚 Documentazione Aggiuntiva
-
-- [CHANGELOG.md](./CHANGELOG.md) - Storia completa versioni
-- [ANILIST-GUIDE.md](./ANILIST-GUIDE.md) - Guida dettagliata AniList
-- [GUIDA-RAPIDA.md](./GUIDA-RAPIDA.md) - Quick start italiano
-
----
-
 **Versione Attuale:** 2.3.0  
 **Ultimo Aggiornamento:** Novembre 2025
 
